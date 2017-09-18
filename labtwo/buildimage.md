@@ -33,7 +33,7 @@ Now we can look at the docker images cached on our machine:
 ```
 docker images
 ```
-You should see an image for nginx (pulled down in the prior lab) and a new image for **myapp**.  Now let's run our new app:
+You should see at least 2 images, an image for nginx (pulled down in the prior lab) and a new image for **myapp**.  Now let's run our new app:
 ```
 docker run -d -p 80:80 --name myapp myapp
 docker ps
@@ -44,3 +44,10 @@ And now you should be able to hit your app from your browser:
 ## Optional: Customize your container
 Edit the file **index.html** and rebuild your container.
 (Be sure to stop and remove the old container first: `docker stop myapp; docker rm myapp`)
+
+To edit the **index.html** file, run the following command:
+        vim index.html
+
+Move the cursor to the text in the body and type a.  This will allow you to add/modify text. 
+Once finished editing, hit escape.  
+Type :wq then enter to save the file and quit.
