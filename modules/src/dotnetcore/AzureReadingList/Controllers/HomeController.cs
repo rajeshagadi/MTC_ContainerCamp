@@ -11,6 +11,14 @@ namespace AzureReadingList.Controllers
     public class HomeController : Controller
     {
         public IActionResult Index()
+        {   
+            //code to get the ipaddress...going to the list until other features ready.
+            //var myIpAddress = HostInfo.Instance.HostIpAddress;
+            //ViewData["IpAddress"] = myIpAddress;
+            return View();
+        }
+
+        public IActionResult Services()
         {
             return View();
         }
