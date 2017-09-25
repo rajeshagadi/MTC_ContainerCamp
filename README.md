@@ -37,8 +37,8 @@ In this lab you will deploy Docker with swarm mode, using an acs-machine templat
 * [Deploy multicontainer applications](labfive/multiapp.md)
 
 
-## Lab Six: Azure Container Instances with ACS and Kubernetes
-Deploy containers to Azure in a variety of ways including App Service PaaS and Azure Container Instance vis ACS. Get introduced to Draft and Helm, Cosmos DB, and Application Insights.  Find the complete lab at [Intro to Containers on Azure Lab](https://github.com/shanepeckham/ContainersOnAzure_IntroLab)
+## Lab Six: ACS with Kubernetes
+* [Deploy containers to Azure Container Service using Kubernetes](modules/kubernetes/kubernetes.md)
 
 
 
