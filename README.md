@@ -40,5 +40,6 @@ In this lab you will deploy Docker with swarm mode, using an acs-machine templat
 ## Lab Six: ACS with Kubernetes
 * [Deploy containers to Azure Container Service using Kubernetes](modules/kubernetes/kubernetes.md)
 
-
+## Lab Seven: Using Azure Container Instances
+* [Deploying an App as an Azure Container Instance](modules/azurecontainerinstances/aci.md)
 
