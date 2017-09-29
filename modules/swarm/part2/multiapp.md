@@ -9,7 +9,7 @@ First, ssh into your swarm master (using the instructions from part 1
 For this lab, we're going to use a docker compose file to deploy a multi-container application on our cluster.  Copy the following, and save it to the file 'docker-compose.yml'
 
 ```
-version: '2'
+version: '3'
 services:
   mysql:
     image: "mysql/mysql-server:latest"
