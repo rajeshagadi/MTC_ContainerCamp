@@ -3,26 +3,13 @@
 In this lab we're going to experiment with using docker compose to deploy multi-container applications.
 
 ## Connect to the swarm master
-First, ssh into your swarm master (using the instructions from lab 4)
+First, ssh into your swarm master (using the instructions from part 1
 
 ## Docker Compose
-For this lab, we're going to use a docker compose file to deploy a multi-container application on our cluster.
-
-<!--
-First, pull down this lab onto the swarm master and cd into lab four:
-
-    git clone https://github.com/larryms/ContainerCamp
-    cd ContainerCamp/labfive
---> 
-First, cd into lab five:
-```
-cd ~/labfive
-```
-
-We're going to use the file 'docker-compose.yml'
+For this lab, we're going to use a docker compose file to deploy a multi-container application on our cluster.  Copy the following, and save it to the file 'docker-compose.yml'
 
 ```
-version: '2'
+version: '3'
 services:
   mysql:
     image: "mysql/mysql-server:latest"
@@ -47,12 +34,12 @@ services:
       spring.datasource.username: user
       spring.datasource.password: password
       externalAPI.recommendationAPIURL: http://api:8080/recommendations
-    restart: on-failure
+   
 ```
 
 This file will be used to deploy a three-tier web application:
 
-![pcf app](pcfapp.png)
+![app](multicontainer.png)
 
 
 ## Deploy the stack
@@ -60,7 +47,8 @@ We'll use the docker stack command to deploy the compose file:
 
     docker stack  deploy -c docker-compose.yml  READ
 
-You can visit the app in your browser to confirm it works; just look up the dns address or ip address in the Azure portal 
+You can visit the app in your browser to try it out. Enter the url in your browser: http://[AGENTFQDN] 
+<br>(this is the DNS name for the agend stack we noted in part 1)
 
 ### Analysis
 To view the services in the stack:
@@ -83,7 +71,7 @@ Now, let's scale the web tier:
     docker service scale READ_web=3
     docker service ls
 
-Take a look at the Docker Visualizer window you opened in Lab four.  Notice how the containers making up this application are deployed in the cluster.
+Take a look at the Docker Visualizer window you opened in part 1.  Notice how the containers making up this application are deployed in the cluster.
 
 
 
