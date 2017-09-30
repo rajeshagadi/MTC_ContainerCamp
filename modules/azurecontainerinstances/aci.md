@@ -255,5 +255,7 @@ To support different developer environments, the .NET Core application will be d
     az container delete --name <container_name> --resource-group <your_group_name>
     ```
 
+Blog reference:
+https://blogs.msdn.microsoft.com/alimaz/2017/08/17/visual-studio-docker-azure-container-instances-better-together/
 
 
