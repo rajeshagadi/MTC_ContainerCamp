@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using AzureReadingList.Models;
+using Microsoft.Azure.Documents;
+using Microsoft.Azure.Documents.Client;
 
 namespace AzureReadingList.Data
 {
     public class ReadingListRepository : IReadingListRepository, IDisposable
     {
+        public static readonly string DatabaseId = "ReadingList";
+        public static readonly string CollectionId = "Recommendations";
+
         private ReadingListContext context;
+        private static DocumentClient client;
+            
         public ReadingListRepository()
         {
 
         }
-        //public void ReadingListRepository(ReadingListContext _context)
-        //{
-        //    context = _context;
-        //}
 
         public void AddBookToListForUser(string userName, Book book)
         {
