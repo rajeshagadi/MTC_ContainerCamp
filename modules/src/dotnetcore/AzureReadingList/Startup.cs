@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using AzureReadingList.Data;
+using AzureReadingList.Models;
 
 namespace AzureReadingList
 {
@@ -27,13 +29,11 @@ namespace AzureReadingList
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder();
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
-                builder.AddUserSecrets<Startup>();
             }
             else
             {
@@ -48,6 +48,8 @@ namespace AzureReadingList
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            ReadingListRepository<Recommendation>.Initialize();
             
         }
     }

@@ -11,49 +11,57 @@ namespace AzureReadingList.Controllers
 {
     public class ReadingListController : Controller
     {
-        private ReadingListRepository repo = new ReadingListRepository();
+        private static string readerName = "richross";
+
         // GET: ReadingList
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             ReadingListViewModel readingListContent = new ReadingListViewModel();
-            readingListContent.LibraryBooks = repo.GetBooks();
-            readingListContent.MyBooks = repo.GetBooksForUser("My Name");
+            readingListContent.LibraryBooks = await ReadingListRepository<Recommendation>.GetBooks(d => d.type == "recommendation");
+
+            
+            readingListContent.MyBooks = (IEnumerable<Book>) await ReadingListRepository<Book>.GetBooksForUser(b => b.reader == readerName);
             return View(readingListContent);
         }
-
-        //// GET: ReadingList/Details/5
-        //public ActionResult Details(int id)
-        //{
-        //    return View();
-        //}
-
-        //// GET: ReadingList/Create
-        //public ActionResult Create()
-        //{
-        //    //return View();
-        //}
 
         // POST: ReadingList/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(IFormCollection collection)
         {
             try
             {
-                // TODO: Add insert logic here
+                Book myNewBookToSave = new Book()
+                {
+                    id = "1001",
+                    title = collection["title"],
+                    isbn = collection["isbn"],
+                    description = collection["description"],
+                    author = collection["author"],
+                    reader = "richross"
+                };
+
+                ReadingListRepository<Book>.Initialize();
+
+                await ReadingListRepository<Book>.AddBookForUser(myNewBookToSave);
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception ex)
             {
                 return View();
             }
         }
 
         // GET: ReadingList/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            //get the requested record.
+            ReadingListRepository<Book>.Initialize();
+
+            IEnumerable<Book> myBooks = (IEnumerable<Book>) await ReadingListRepository<Book>.GetBooksForUser(b => b.id == id.ToString());
+
+            return View(myBooks.First());
         }
 
         // POST: ReadingList/Edit/5

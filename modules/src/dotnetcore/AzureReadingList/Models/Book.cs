@@ -7,11 +7,11 @@ namespace AzureReadingList.Models
 {
     public class Book
     {
-        public int id;
-        public String reader;
-        public String isbn;
-        public String title;
-        public String author;
-        public String description;
+        public string id;
+        public string reader;
+        public string isbn;
+        public string title;
+        public string author;
+        public string description;
     }
 }

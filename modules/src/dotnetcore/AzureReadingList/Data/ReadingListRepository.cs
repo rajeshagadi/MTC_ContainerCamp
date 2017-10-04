@@ -4,33 +4,28 @@ using System.Configuration;
 using AzureReadingList.Models;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
+using System.Threading.Tasks;
+using Microsoft.Azure.Documents.Linq;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace AzureReadingList.Data
 {
-    public class ReadingListRepository : IReadingListRepository, IDisposable
+    public static class ReadingListRepository<T> where T : class
     {
         public static readonly string DatabaseId = "ReadingList";
         public static readonly string CollectionId = "Recommendations";
-
-        private ReadingListContext context;
+        private static string endpoint = "https://mtccontcamp.documents.azure.com:443/";
+        //private static string authKey = "mE815ODDVpj3w5OsZCJEsVPLGnm4gJpFizfRwPwwfVoJ3vNB5YxztQbHRpQcTtSiJSwzJUZc5cRlu9B5zhfMtg=="; //read only
+        
         private static DocumentClient client;
-            
-        public ReadingListRepository()
+
+        public static void Initialize()
         {
+            client = new DocumentClient(new Uri(endpoint), authKey);
+        }        
 
-        }
-
-        public void AddBookToListForUser(string userName, Book book)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void EditBookInUserList(string userName, Book book)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Recommendation> GetBooks()
+        public static async Task<IEnumerable<T>> GetBooks(Expression<Func<T, bool>> predicate)
         {
             //communicate with CosmosDB to get the list of available books.
             IEnumerable<Recommendation> libraryBooks = new List<Recommendation>()
@@ -85,58 +80,60 @@ namespace AzureReadingList.Data
                     imageURL = "https://mtchouimages.blob.core.windows.net/books/Kubernetes.jpg" },
             } as IEnumerable<Recommendation>;
 
-            return libraryBooks;
-        }
+            IDocumentQuery<T> query = client.CreateDocumentQuery<T>(
+                UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
+                new FeedOptions { MaxItemCount = -1 })
+                .Where(predicate)
+                .AsDocumentQuery();
 
-        public IEnumerable<Book> GetBooksForUser(string userName)
-        {
-            //communicate with CosmosDB to get the list of available books.
-            IEnumerable<Book> myBooks = new List<Book>()
+            List<T> results = new List<T>();
+            while (query.HasMoreResults)
             {
-                new Book() { author="John Smith", description="Lore ipsum.", id=4737283, isbn="488239238", title="Some Awesome new Book!" },
-            } as IEnumerable<Book>;
+                results.AddRange(await query.ExecuteNextAsync<T>());
+            }
 
-            return myBooks;
+            return results;
         }
 
-        public void RemoveBookFromListForUser(string userName, Book book)
+        public static async Task<IEnumerable<Book>> GetBooksForUser(Expression<Func<Book, bool>> predicate)
         {
-            throw new NotImplementedException();
-        }
+            List<Book> results = new List<Book>();
 
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
+            try
             {
-                if (disposing)
+                IDocumentQuery<Book> query = client.CreateDocumentQuery<Book>(
+                UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
+                new FeedOptions { MaxItemCount = -1 })
+                .Where(predicate)
+                .AsDocumentQuery();
+
+                while (query.HasMoreResults)
                 {
-                    // TODO: dispose managed state (managed objects).
+                    results.AddRange(await query.ExecuteNextAsync<Book>());
                 }
+            }
+            catch (Exception ex)
+            {
+                
+            }
 
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
+            return results;
+        }
 
-                disposedValue = true;
+        public static async Task AddBookForUser(Book myNewBook)
+        {
+            try
+            {
+                await client.CreateDocumentAsync(
+                UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
+                myNewBook);
+            }
+            catch (Exception ex)
+            {
+                
             }
         }
 
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~ReadingListRepository() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
 
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
-        }
-        #endregion
     }
 }

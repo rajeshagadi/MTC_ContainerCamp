@@ -8,6 +8,7 @@ namespace AzureReadingList.Models
     public class Recommendation
     {
         public int id;
+        public string type = "recommendation";
         public String isbn;
         public String title;
         public String author;

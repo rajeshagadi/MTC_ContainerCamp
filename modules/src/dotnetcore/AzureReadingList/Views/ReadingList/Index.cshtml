@@ -61,13 +61,13 @@
             @foreach (var recommendation in Model.LibraryBooks)
             {
                 <div class="col-lg-3 col-md-4 col-xs-6 thumb" >
-                    <form action="#" id="addBookForm" method="post">
+                    <form asp-action="Create" id="addBookForm" method="post">
                         <a class="thumbnail" href="#" onclick="parentNode.submit()">
                             <img class="img-responsive" src="@recommendation.imageURL" alt=""/>
-                            @*<input type="hidden" id="title" name="title" />
-                            <input type="hidden" th:value="${recommendation.author}" id="author" name="author" />
-                            <input type="hidden" th:value="${recommendation.isbn}" id="isbn" name="isbn" />
-                            <input type="hidden" th:value="${recommendation.description}" id="description" name="description" />*@
+                            <input type="hidden" id="title" name="title" value="@recommendation.title" />
+                            <input type="hidden" id="author" name="author" value="@recommendation.author" />
+                            <input type="hidden" value="@recommendation.isbn" id="isbn" name="isbn" />
+                            <input type="hidden" value="@recommendation.description" id="description" name="description" />
                         </a>
                     </form>
                 </div>
