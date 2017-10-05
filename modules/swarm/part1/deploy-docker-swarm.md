@@ -1,5 +1,11 @@
+<!-- This section leverages the new, preview Swarm Mode (aka Docker CE) features
+of ACS.  However, as of the date of this lab (9/25/17) these features are only availablea
+using the cli/powershell/ARM; they are not available via the portal.
+As soon as the feature is available in the portal, this module will be updated.
+-->
+
 # How to use docker with swarm
-This lab will create a docker swarm mode cluster using acs-engine.
+This lab will create a Docker Swarm Mode (Docker CE) cluster using Azure Container Services.  This is a new, preview capability of Azure.
 
 ## Deploy the cluster
 1. First, go back to your linux jumpbox and run the following command to generate ssh keys that will be used later in the exercise:  (leave the pasphrase blank)
@@ -12,31 +18,43 @@ cat ~/.ssh/acs_rsa.pub
 ```
 > Alternatively, if you are comfortable, you can use your local SSH program (such as Bitvise or Putty) to generate the SSH keys.  Just adapt the instructions as necessary.
 
-2. Now we're going to create the swarm mode cluster by launching the following template in the Azure portal:  (I recommend you right-click on the link and say 'open in new window' so you can easily come back here):<br>
-<!--
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazure%2Fazure-quickstart-templates%2Fmaster%2F101-acsengine-swarmmode%2Fazuredeploy.json" target="_blank">     <img src="http://azuredeploy.net/deploybutton.png"/> </a>
--->
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Flarryms%2FContainerCamp%2Fmaster%2Flabfour%2Fswarmmode%2Fazuredeploy.json" target="_blank">     <img src="http://azuredeploy.net/deploybutton.png"/> </a>
+2. Now let's use the cli to create the Swarm-mode cluster.  First we need to create a resource group:
+> Note: Please use the westcentralus region as this preview capability is not available yet in all Azure regions 
+```
+az group create --name SwarmRG --location westcentralus 
+```
 
-Fill in the following:
+3. Next, let's create the cluster.  The following command creates a cluster named *mySwarmCluster* with one Linux master node and three Linux agent nodes.
+```
+az acs create --name mySwarmCluster --orchestrator-type dockerce --resource-group SwarmRG --ssh-key-value ~/.ssh/acs_rsa.pub
+```
+Once this command finishes, you can verify it executed by running
 
-1. **Resource Group:**  Create new -> 'swarmmoderg'
-2. **Agent Count:**   2
-3. **Endpoint DNS Name Prefix:**  [yourinitials]lab
-4. **Admin username:**  adminuser
-4. **Location:** eastus
-4. **Master Endpoint DNS Name Prefix:** [yourinitials]master
-5. **Master VM Size:**  Standard_DS2_V2
-6. **SSH Public Key:**  *paste in the pubic RSA key from step 1*    
-
-Then press the 'Puchase' button and the cluster will deploy.
+    az acs list
+You should see output that looks like:
+```
+Location       Name            ProvisioningState    ResourceGroup
+-------------  --------------  -------------------  ---------------
+westcentralus  mySwarmCluster  Succeeded            SwarmRG
+```
 
 ## Connect to the Cluster
-Now that the cluster is deployed, we need to ssh to the master.  The first step is to find the IP address that was assigned to the loadbalancer in front of the master.
+Now that the cluster is deployed, we need to ssh to the master.  The first step is to find the DNS name that was assigned to the loadbalancer in front of the master.  We can find this using the cli:
 
-1. In the portal, go into the resource group for the swarm cluster you just created, scroll down to 'Deployments', then click on "Microsoft.Template".  
-2. You will see a field titled **MASTERFQDN**.  Copy the value of this field as it is the DNS name of your master.  Also note the field **AGENTFQDN** which is the DNS name of the load balancer setting in front of your cluster.  (_You'll need this later_)
-3. From your laptop, ssh into this server, e.g, `ssh -i ~/.ssh/acs_rsa adminuser@[MASTERFQDN]` to connect to the swarm master.
+    MASTERFQDN=$(az acs list -o tsv --query [0].masterProfile.fqdn)
+    echo $MASTERFQDN
+
+Similarly, we need to grab the DNS name for the agents in our cluster.  Run the following command:
+
+    AGENTFQDN=$(az acs list -o tsv --query [0].agentPoolProfiles[0].fqdn)
+    echo $AGENTFQDN
+
+Make note of this name (save it to a scratchpad); we'll refer to it later as AGENTFQDN.
+
+ 
+ At this point, we can ssh to your master using the following (substituting your master name):
+
+    ssh -i ~/.ssh/acs_rsa azureuser@$MASTERFQDN
 
 Now that you are on the swarm master, check the status of the cluster by running:
 
@@ -52,13 +70,13 @@ Look for the following information within the resulting output:
      Nodes: 3
 
 
-## Begin managing the swarm cluster
+## Begin managing the Swarm cluster
 
-First, let's do a little work to configure our cluster for this lab:
+First, let's do a little work to configure our cluster for this lab.  Run the following:
 
-    git clone https://github.com/larryms/ContainerCamp.git  
-    sh ~/ContainerCamp/labfour/configswarm.sh
+    docker node update --availability active $(docker node ls -f "role=manager" -q)
 
+> This command enables you to run containers on the master, which we'll need to do later.
 
 Now the cluster is ready to go!
 
@@ -95,6 +113,8 @@ Inspect the details of the service. If you leave off the "pretty" switch, you'll
 
     docker service inspect --pretty my_web
 
+Let's access the nginx web server from our browser.  To do that, we need to first 
+
 From your browser on your laptop, browse to http://[AGENTFQDN]. You should see the nginx welcome screen.
 
 ## Graphically inspect the cluster
@@ -110,7 +130,7 @@ docker service create \
   dockersamples/visualizer
   ```
 Now in your browser, open a new tab and go to http://[AGENTFQDN]:8080
-> Note the above is _**AGENTFQDN**_, not _MASTERFQDN_.  
+  
 
 You should see a graphical vizualization of your cluster.  You can watch it scale your services up and down:
 
