@@ -10,5 +10,5 @@ namespace AzureReadingList.Models
         public static string DatabaseId = "ReadingList";
         public static string CollectionId = "Recommendations";
         public static string readerName = "richross";
-            }
+    }
 }
