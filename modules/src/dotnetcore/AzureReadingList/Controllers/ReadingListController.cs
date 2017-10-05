@@ -10,17 +10,15 @@ using AzureReadingList.Models;
 namespace AzureReadingList.Controllers
 {
     public class ReadingListController : Controller
-    {
-        private static string readerName = "richross";
-
+    { 
         // GET: ReadingList
         public async Task<ActionResult> Index()
         {
             ReadingListViewModel readingListContent = new ReadingListViewModel();
             readingListContent.LibraryBooks = await ReadingListRepository<Recommendation>.GetBooks(d => d.type == "recommendation");
 
-            
-            readingListContent.MyBooks = (IEnumerable<Book>) await ReadingListRepository<Book>.GetBooksForUser(b => b.reader == readerName);
+            ReadingListRepository<Book>.Initialize();   
+            readingListContent.MyBooks = (IEnumerable<Book>) await ReadingListRepository<Book>.GetBooksForUser(b => b.reader == Settings.readerName);
             return View(readingListContent);
         }
 
@@ -31,30 +29,35 @@ namespace AzureReadingList.Controllers
         {
             try
             {
-                Book myNewBookToSave = new Book()
-                {
-                    id = "1001",
-                    title = collection["title"],
-                    isbn = collection["isbn"],
-                    description = collection["description"],
-                    author = collection["author"],
-                    reader = "richross"
-                };
+                Book myNewBookToSave = SaveCollectionAsBook(collection);
 
                 ReadingListRepository<Book>.Initialize();
 
-                await ReadingListRepository<Book>.AddBookForUser(myNewBookToSave);
+                await ReadingListRepository<Book>.UpsertBookForUser(myNewBookToSave);
 
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return View();
             }
         }
 
+        private static Book SaveCollectionAsBook(IFormCollection collection)
+        {
+            return new Book()
+            {
+                id = string.Concat(Settings.readerName, collection["isbn"]),
+                title = collection["title"],
+                isbn = collection["isbn"],
+                description = collection["description"],
+                author = collection["author"],
+                reader = Settings.readerName
+            };
+        }
+
         // GET: ReadingList/Edit/5
-        public async Task<ActionResult> Edit(int id)
+        public async Task<ActionResult> Edit(string id)
         {
             //get the requested record.
             ReadingListRepository<Book>.Initialize();
@@ -67,12 +70,15 @@ namespace AzureReadingList.Controllers
         // POST: ReadingList/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(string id, IFormCollection collection)
         {
             try
             {
-                // TODO: Add update logic here
+                Book updatedBook = SaveCollectionAsBook(collection);
 
+                ReadingListRepository<Book>.Initialize();
+                await ReadingListRepository<Book>.UpsertBookForUser(updatedBook);
+                    
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -82,8 +88,17 @@ namespace AzureReadingList.Controllers
         }
 
         // GET: ReadingList/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(string id)
         {
+            try
+            {
+                ReadingListRepository<Book>.Initialize();
+                await ReadingListRepository<Book>.RemoveBookForUser(id);
+            }
+            catch (Exception ex)
+            {
+
+            }
             return RedirectToAction("Index");
         }
 

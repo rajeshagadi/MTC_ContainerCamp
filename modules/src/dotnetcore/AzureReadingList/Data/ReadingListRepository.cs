@@ -13,10 +13,10 @@ namespace AzureReadingList.Data
 {
     public static class ReadingListRepository<T> where T : class
     {
-        public static readonly string DatabaseId = "ReadingList";
-        public static readonly string CollectionId = "Recommendations";
-        private static string endpoint = "https://mtccontcamp.documents.azure.com:443/";
-        //private static string authKey = "mE815ODDVpj3w5OsZCJEsVPLGnm4gJpFizfRwPwwfVoJ3vNB5YxztQbHRpQcTtSiJSwzJUZc5cRlu9B5zhfMtg=="; //read only
+        public static readonly string DatabaseId = Settings.DatabaseId;
+        public static readonly string CollectionId = Settings.CollectionId;
+        private static string endpoint = Settings.EndPoint;
+        private static string authKey = Settings.ReadWriteAuthKey;
         
         private static DocumentClient client;
 
@@ -120,11 +120,11 @@ namespace AzureReadingList.Data
             return results;
         }
 
-        public static async Task AddBookForUser(Book myNewBook)
+        public static async Task UpsertBookForUser(Book myNewBook)
         {
             try
             {
-                await client.CreateDocumentAsync(
+                await client.UpsertDocumentAsync(
                 UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
                 myNewBook);
             }
@@ -134,6 +134,18 @@ namespace AzureReadingList.Data
             }
         }
 
+        public static async Task RemoveBookForUser(string bookId)
+        {
+            try
+            {
+                await client.DeleteDocumentAsync(
+                    UriFactory.CreateDocumentUri(DatabaseId, CollectionId, bookId));
+            }
+            catch (Exception ex)
+            {
 
+                throw;
+            }
+        }
     }
 }
