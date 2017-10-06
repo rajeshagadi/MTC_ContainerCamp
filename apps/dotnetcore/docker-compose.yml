@@ -6,3 +6,7 @@ services:
     build:
       context: ./AzureReadingList
       dockerfile: Dockerfile
+    environment: 
+    - EndPoint=<Replace with your Endpoint url>
+    - ReadWriteAuthKey=<Replace with your endpoint key>
+    - ReadOnlyAuthKey=<Replace with your endpoint key>

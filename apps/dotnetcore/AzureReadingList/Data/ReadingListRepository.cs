@@ -23,7 +23,64 @@ namespace AzureReadingList.Data
         public static void Initialize()
         {
             client = new DocumentClient(new Uri(endpoint), authKey);
-        }        
+        }       
+        
+        public static async void StartUpMode()
+        {
+            //Load data into the new collection.
+            IEnumerable<Recommendation> libraryBooks = new List<Recommendation>()
+            {
+                new Recommendation() {
+                    author ="Johnathan Baier",
+                    description ="Learn Kubernetes the Right Way.",
+                    id =1, isbn="01234",
+                    title ="Get Started with Kubernetes",
+                    imageURL = "https://mtchouimages.blob.core.windows.net/books/Kubernetes.jpg" },
+                new Recommendation() {
+                    author ="Rajdeep Das",
+                    description ="Docker Networking Deep Dive",
+                    id =2, isbn="95201",
+                    title ="Learn Docker Networking",
+                    imageURL ="https://mtchouimages.blob.core.windows.net/books/DockerNetworking.jpg"  },
+                new Recommendation() {
+                    author ="Johnathan Baier",
+                    description ="Learn Kubernetes the Right Way.",
+                    id =3, isbn="01234",
+                    title ="Get Started with Kubernetes",
+                    imageURL = "https://mtchouimages.blob.core.windows.net/books/Kubernetes.jpg" },
+                new Recommendation() {
+                    author ="Johnathan Baier",
+                    description ="Learn Kubernetes the Right Way.",
+                    id =4, isbn="01234",
+                    title ="Get Started with Kubernetes",
+                    imageURL = "https://mtchouimages.blob.core.windows.net/books/Kubernetes.jpg" },
+                new Recommendation() {
+                    author ="Johnathan Baier",
+                    description ="Learn Kubernetes the Right Way.",
+                    id =5, isbn="01234",
+                    title ="Get Started with Kubernetes",
+                    imageURL = "https://mtchouimages.blob.core.windows.net/books/Kubernetes.jpg" },
+                new Recommendation() {
+                    author ="Johnathan Baier",
+                    description ="Learn Kubernetes the Right Way.",
+                    id =6, isbn="01234",
+                    title ="Get Started with Kubernetes",
+                    imageURL = "https://mtchouimages.blob.core.windows.net/books/Kubernetes.jpg" },
+                new Recommendation() {
+                    author ="Johnathan Baier",
+                    description ="Learn Kubernetes the Right Way.",
+                    id =7, isbn="01234",
+                    title ="Get Started with Kubernetes",
+                    imageURL = "https://mtchouimages.blob.core.windows.net/books/Kubernetes.jpg" },
+                new Recommendation() {
+                    author ="Johnathan Baier",
+                    description ="Learn Kubernetes the Right Way.",
+                    id =8, isbn="01234",
+                    title ="Get Started with Kubernetes",
+                    imageURL = "https://mtchouimages.blob.core.windows.net/books/Kubernetes.jpg" },
+            } as IEnumerable<Recommendation>;
+
+        }
 
         public static async Task<IEnumerable<T>> GetBooks(Expression<Func<T, bool>> predicate)
         {
