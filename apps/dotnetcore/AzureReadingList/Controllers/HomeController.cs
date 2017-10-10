@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AzureReadingList.Models;
+using AzureReadingList.Data;
 
 namespace AzureReadingList.Controllers
 {
@@ -18,16 +19,25 @@ namespace AzureReadingList.Controllers
             return View();
         }
 
-        public IActionResult Services()
+        public IActionResult About()
         {
+            ViewData["Message"] = "This button will create the default content in your new CosmosDB collection.";
+
             return View();
         }
 
-        public IActionResult About()
+        public async Task<IActionResult> Deploy()
         {
-            ViewData["Message"] = "Your application description page.";
+            ReadingListRepository<Recommendation>.Initialize();
 
-            return View();
+            await ReadingListRepository<Recommendation>.StartUpMode(); 
+
+            return RedirectToAction("Index", "ReadingList");
+        }
+
+        public IActionResult Cancel()
+        {
+            return RedirectToAction("Index", "ReadingList");
         }
 
         public IActionResult Contact()

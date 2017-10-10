@@ -46,7 +46,7 @@ namespace AzureReadingList
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=ReadingList}/{action=Index}/{id?}");
             });
 
             ReadingListRepository<Recommendation>.Initialize();

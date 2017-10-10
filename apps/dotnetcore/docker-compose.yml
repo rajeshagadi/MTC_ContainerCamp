@@ -7,6 +7,9 @@ services:
       context: ./AzureReadingList
       dockerfile: Dockerfile
     environment: 
-    - EndPoint=<Replace with your Endpoint url>
-    - ReadWriteAuthKey=<Replace with your endpoint key>
+    - EndPoint=<Replace with DocumentEndpoint>
+    - ReadWriteAuthKey=<Replace with Primary Key>
     - ReadOnlyAuthKey=<Replace with your endpoint key>
+    - DatabaseId=ReadingList
+    - CollectionId=Documentation
+    - readerName=testuser
