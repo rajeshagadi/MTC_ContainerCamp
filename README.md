@@ -16,28 +16,35 @@ In this setup, you will create a linux jumpbox VM in Azure using the Azure Porta
 - Setup Step 3: [Install Docker on the jumpbox](setup/azdockerinstall.md)
 - Setup Step 4: [Clone this github respository](setup/gitclone.md)
 
-## Deploy some containers on your jumpbox ##
+## Module: Deploy some containers on your jumpbox ##
 
 1. [Use the Jumpbox to deploy containers](modules/docker/deploy-docker-vm.md)
 2. [Create a custom container](modules/docker/buildimage.md)
 3. [Instrument & Monitor your containers](modules/oms/oms4containers.md)
 
-## Configure a Windows Container Host ##
+## Module: Configure a Windows Container Host ##
 In this lab you will build a Windows 2016 Server Container Host and deploy Windows containers.
 
 * [Windows Containers on Windows Server](modules/windowscontainers/windows-containers.md)
 
-## Setup Docker Swarm and Deploy Some Containers ##
+## Module : Setup Docker Swarm and Deploy Some Containers ##
 In this lab you will deploy Docker with swarm mode, using an acs-machine template to deploy to Azure. Once you have a swarm cluster you will deploy some things to it...
 
 * [Deploy a Swarm Mode cluster](modules/swarm/part1/deploy-docker-swarm.md)
 
 
-## Deploy Multicontainer Applications
+## Module : Deploy Multicontainer Applications
+
 * [Deploy multicontainer applications](modules/swarm/part2/multiapp.md)
 
 
-## Lab Six: Azure Container Instances with ACS and Kubernetes
-Deploy containers to Azure in a variety of ways including App Service PaaS and Azure Container Instance vis ACS. Get introduced to Draft and Helm, Cosmos DB, and Application Insights.  Find the complete lab at [Intro to Containers on Azure Lab](https://github.com/shanepeckham/ContainersOnAzure_IntroLab)
+## Module: Deploy Containers to Azure ACS with Kubernetes
+
+* [Deploy Azure ACS with Kubernetes](modules/kubernetes/kubernetes.md)
+
+
+## Module : Securing Containerized Applications
+
+* [Securing Containerized Applications](modules/security/README.md)
 
 
