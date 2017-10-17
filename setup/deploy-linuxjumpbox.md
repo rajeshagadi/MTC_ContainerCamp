@@ -21,7 +21,7 @@ Select the **DS1_V2 Standard** tile and click 'Select'.
 
      _Note:_ If you do not see this size listed, click the 'View All' link in the upper right section, just below the Minimum Memory textbox.
 3. On the 'Settings' page, just click 'OK'.  
-4. Finally, on the 'Summary' page, review the settings, then click 'OK'
+4. Finally, on the 'Purchase' page, review the settings, then click 'Purchase'
 
 At this point, your linux VM will begin to deploy.   This may take a minute or two.
 
@@ -29,6 +29,8 @@ Once your VM has deployed, navigate to it in the portal.  Take a look at the Ove
         ssh [username]@[ip address]
 
 > On Windows and need SSH? Try any of the following: 
+
+>   [Cloud Shell](https://docs.microsoft.com/en-us/azure/cloud-shell/quickstart) |
 >   [Putty](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html) |
 >   [Bitvise SSH](https://www.bitvise.com/ssh-client-download) | 
 >   [Windows Subsystem for Linux](https://msdn.microsoft.com/en-us/commandline/wsl/install_guide)
