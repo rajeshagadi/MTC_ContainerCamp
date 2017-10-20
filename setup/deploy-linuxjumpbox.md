@@ -37,10 +37,10 @@ Once your VM has deployed, navigate to it in the portal.  Take a look at the Ove
 
 
 ## Connect to the Jumpbox
-From your laptop, ssh into the jumpbox.
+From your laptop, ssh into the jumpbox using above of the above tools you ahve adapted for your environment.
 
 ## Install the Azure cli
-1. First, you need to install some prereqs.
+1. First, you need to install some prereqs. Run below commands from your SSH bash command:
 ```
 sudo apt-get update && sudo apt-get install -y libssl-dev libffi-dev python-dev build-essential
 ```
