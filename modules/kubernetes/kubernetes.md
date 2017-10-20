@@ -94,35 +94,39 @@ At the end of this task you will have a total of 3 pods. Two for the app tier an
     ```none
     kubectl create -f .\mysql-deployment.yaml
     ```
-5. Deploy the web UX and web service of the application using the following command:
+5. Deploy a Kubernetes service for the mysql database using the following command:
+    ```
+    kubectl create -f .\mysql-deployment.yaml
+    ```
+6. Deploy the web UX and web service of the application using the following command:
     ```none
     kubectl create -f .\readinglist-deployment.yaml
     ```
-6. Expose the web UX as a public service by running the following command:
+7. Expose the web UX as a public service by running the following command:
     ```none
     kubectl create -f .\readinglist-service.yaml
     ```
-7. Monitor the service creation and find the public IP address when the load balancer is configured by running the following command:
+8. Monitor the service creation and find the public IP address when the load balancer is configured by running the following command:
     ```none
     kubectl get svc web
     ```
     You will have to execute the command several times while you wait for the load balancer to be properly configured.  The IP address will change from *pending* to a valid IP address when finished.
 
-8.  Access the Reading List application by opening your browser to http://<PublicIP>/readinglist
+9. Access the Reading List application by opening your browser to http://<PublicIP>/readinglist
 
-9. You can check the number of pods running in your cluster with the following command:
+10. You can check the number of pods running in your cluster with the following command:
     ```none
     kubectl get pods
     ```
-10. You can scale the number of pods used by your application at any time. To scale the number of pods for the web tier of the Reading List application, run the following command:
+11. You can scale the number of pods used by your application at any time. To scale the number of pods for the web tier of the Reading List application, run the following command:
     ```none
     kubectl scale deployment/web --replicas=3
     ```
-11. Check the number of pods now being used by the application by running this command:
+12. Check the number of pods now being used by the application by running this command:
     ```none
     kubectl get pods
     ```
-12. Determine the number of web tier pod endpoints being load balanced by the app service tier with the following command:
+13. Determine the number of web tier pod endpoints being load balanced by the app service tier with the following command:
     ```none
     kubectl get ep web
     ```
