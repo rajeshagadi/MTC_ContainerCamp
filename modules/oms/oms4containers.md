@@ -17,7 +17,7 @@ In this section, we are going to set up a container to integrate our Docker envi
     ![tile](tile.PNG)
     2. Click on the OMS Portal icon at the top.  The OMS portal will open in a new tab.
     3. From the top right tool bar, click on the gear icon to open the settings page.
-    ![omstoolbar](omstoolbar.png)
+    ![omstoolbar](omstoolbar.png)<br>
      
     4. From the Settings, then open **Connected Sources**, and then click on **Linux Servers**<br>
         ![connectedsources](connectedsources.png)<br>
