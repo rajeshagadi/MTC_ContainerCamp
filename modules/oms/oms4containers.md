@@ -16,10 +16,12 @@ In this section, we are going to set up a container to integrate our Docker envi
     1. On the Azure portal dashboard click on your Containers solution tile.<br>
     ![tile](tile.PNG)
     2. Click on the OMS Portal icon at the top.  The OMS portal will open in a new tab.
-    3. Click on **Data Sources** connected tile on the home page, then open **Connected Sources**, and then click on **Linux Servers**<br>
-    ![datasources](datasources.png)<br>
-    ![connectedsources](connectedsources.png)<br>
-    4. Make note of (_copy somewhere_) the **Workspace ID** and **Primary Key**.  Run the following:
+    3. From the top right tool bar, click on the gear icon to open the settings page.
+    ![datasource](omstoolbar.png)
+     
+    4. From the Settings, then open **Connected Sources**, and then click on **Linux Servers**<br>
+        ![connectedsources](connectedsources.png)<br>
+    5. Make note of (_copy somewhere_) the **Workspace ID** and **Primary Key**.  Run the following command from your linux jumpbox bash command:
     ```
     export WSID=<your workspace id>
     export KEY=<your key>
