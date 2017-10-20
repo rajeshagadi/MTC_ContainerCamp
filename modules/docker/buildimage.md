@@ -4,7 +4,7 @@ We're now going to build a customer docker image using nginx as a base.
 From your jumpbox, take a look at the Dockerfile:
 
 ```
-cd ~/ContainerCamp/labtwo
+cd ~/ContainerCamp/modules/docker
 cat Dockerfile
 ```
 You'll see:
