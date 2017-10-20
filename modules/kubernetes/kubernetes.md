@@ -82,25 +82,25 @@ Kubectl is the command line tool for administering your ACS Kubernetes cluster.
 ## Task 5: Deploy the application to Kubernetes
 In this task, you will deploy the readinglist application stack to Kubernetes cluster. In kubernetes a group of one or more containers run as a pod. Pods can also have shared storage for the containers running in the pod. 
 
-At the end of this task you will have a total of 3 pods. Two for the app tier and one for MySQL.. The app tier pods will have both “ReadingList web app” and “Recommendation service”. There will be a total of 5 containers across 3 pods. 
+At the end of this task you will have a total of 3 pods. Two for the app tier and one for MySQL.. The app tier pods will have both ï¿½ReadingList web appï¿½ and ï¿½Recommendation serviceï¿½. There will be a total of 5 containers across 3 pods. 
 
 1. If you do not already have Git installed on your machine, [follow the instructions for installing Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 2. Clone the repository containing this tutorial with the following command:
     ```none
     git clone https://github.com/Microsoft/MTC_ContainerCamp
     ```
-3. Make the directory containing the deployment *.yaml* files your current directory - */MTC_ContainerCamp/modules/kubernetes/src*
+3. Make the directory containing the deployment *.yaml* files your current directory - */MTC_ContainerCamp/modules/kubernetes/src/deploy*
 4. Deploy a Kubernetes pod containing a mysql database using the following command:
     ```none
-    kubectl create -f mysql-deployment.yaml
+    kubectl create -f .\mysql-deployment.yaml
     ```
 5. Deploy the web UX and web service of the application using the following command:
     ```none
-    kubectl create -f readinglist-deployment.yaml
+    kubectl create -f .\readinglist-deployment.yaml
     ```
 6. Expose the web UX as a public service by running the following command:
     ```none
-    kubectl create -f ./readinglist-service.yaml
+    kubectl create -f .\readinglist-service.yaml
     ```
 7. Monitor the service creation and find the public IP address when the load balancer is configured by running the following command:
     ```none
