@@ -1,4 +1,7 @@
 # Container Camp #
+
+#Pleas check the WIP branch#
+
 The official un-official container camp used to build out containerized applications on Azure.
 
 We assume you have an Azure Subscription... If you don't, break out your Microsoft Account (aka LiveID, Hotmail account, etc) and pick one of these options:
