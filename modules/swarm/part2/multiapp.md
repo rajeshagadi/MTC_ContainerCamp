@@ -1,4 +1,4 @@
-# Docker Compose & Multi-Container Applications
+# Deploy multicontainer applications
 
 In this lab we're going to experiment with using docker compose to deploy multi-container applications.
 
@@ -35,6 +35,12 @@ services:
       spring.datasource.password: password
       externalAPI.recommendationAPIURL: http://api:8080/recommendations
    
+```
+You can create file using following command:
+
+
+```
+cat "[paste above docker compose file text]" >> docker-compose.yml
 ```
 
 This file will be used to deploy a three-tier web application:

@@ -1,4 +1,4 @@
-# Monitoring Containers with OMS
+# Instrument & Monitor your containers
 In this section, we are going to set up a container to integrate our Docker environment with Azure's Operations Management Suite.
 
 ## Task 1: Prepare OMS

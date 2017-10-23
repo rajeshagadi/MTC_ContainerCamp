@@ -4,8 +4,8 @@ using the cli/powershell/ARM; they are not available via the portal.
 As soon as the feature is available in the portal, this module will be updated.
 -->
 
-# How to use docker with swarm
-This lab will create a Docker Swarm Mode (Docker CE) cluster using Azure Container Services.  This is a new, preview capability of Azure.
+# Deploy a Swarm Mode cluster
+This lab will create a Docker Swarm Mode (Docker CE- which is Docker Community Edition) cluster using Azure Container Services.  This is a new, preview capability of Azure.
 
 ## Deploy the cluster
 1. First, go back to your linux jumpbox and run the following command to generate ssh keys that will be used later in the exercise:  (leave the pasphrase blank)
@@ -19,7 +19,7 @@ cat ~/.ssh/acs_rsa.pub
 > Alternatively, if you are comfortable, you can use your local SSH program (such as Bitvise or Putty) to generate the SSH keys.  Just adapt the instructions as necessary.
 
 2. Now let's use the cli to create the Swarm-mode cluster.  First we need to create a resource group:
-> Note: Please use the westcentralus region as this preview capability is not available yet in all Azure regions 
+> Note: Please use the **westcentralus** region as this preview capability is not available yet in all Azure regions 
 ```
 az group create --name SwarmRG --location westcentralus 
 ```
@@ -154,6 +154,10 @@ Finally, delete the service:
     docker service rm my_web
 
 ## Optional steps:  Monitor your cluster
+
+Follow the steps outlined in section [Instrument & Monitor your containers](/modules/oms/oms4containers.md) to get your Workspace id and your secret key. Substitue in below command accordingly:
+
+
 On your swarm master, run the following to set up your secrets:
 ```
 export WSID=<your workspace id>
