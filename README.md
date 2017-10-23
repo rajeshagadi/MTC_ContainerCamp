@@ -1,6 +1,6 @@
 # Container Camp #
 
-#Pleas check the WIP branch#
+# Please check the WIP branch #
 
 The official un-official container camp used to build out containerized applications on Azure.
 
