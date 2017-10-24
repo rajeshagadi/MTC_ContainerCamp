@@ -65,7 +65,7 @@ Azure Container Registry (ACR) is an Azure-based, private registry, for Docker c
     ```
     **Example**
     ```none
-    az acr create --resource-group ACRWorkshop --name myacr --sku Basic --admin-enabled true
+    az acr create --resource-group ACSWorkshop --name myacr --sku Basic --admin-enabled true
     ```
 2. To push images to the registry, we must authenticate with the registry.  Use the following command to authenticate with ACR"
  ```none
@@ -103,14 +103,14 @@ Kubectl is the command line tool for administering your ACS Kubernetes cluster.
 ## Task 5: Deploy the application to Kubernetes
 In this task, you will deploy the readinglist application stack to Kubernetes cluster. In kubernetes a group of one or more containers run as a pod. Pods can also have shared storage for the containers running in the pod. 
 
-At the end of this task you will have a total of 3 pods. Two for the app tier and one for MySQL.. The app tier pods will have both “ReadingList web app” and “Recommendation service”. There will be a total of 5 containers across 3 pods. 
+At the end of this task you will have a total of 3 pods. Two for the app tier and one for MySQL.. The app tier pods will have both ï¿½ReadingList web appï¿½ and ï¿½Recommendation serviceï¿½. There will be a total of 5 containers across 3 pods. 
 
 1. If you do not already have Git installed on your machine, [follow the instructions for installing Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 2. Clone the repository containing this tutorial with the following command:
     ```none
     git clone https://github.com/Microsoft/MTC_ContainerCamp
     ```
-3. Make the directory containing the deployment *.yaml* files your current directory - */MTC_ContainerCamp/modules/kubernetes/src*
+3. Make the directory containing the deployment *.yaml* files your current directory - */MTC_ContainerCamp/modules/kubernetes/src/deploy*
 4. Deploy a Kubernetes pod containing a mysql database using the following command:
     ```none
     kubectl create -f mysql-deployment.yaml
