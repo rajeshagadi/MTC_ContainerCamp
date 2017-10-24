@@ -12,7 +12,7 @@ We assume you have an Azure Subscription... If you don't, break out your Microso
 In this setup, you will create a linux jumpbox VM in Azure using the Azure Portal, install the Azure cli, and install docker on the vm.
 
 - Setup Step 1: [Deploy a simple Linux VM jumpbox using portal](setup/deploy-linuxjumpbox.md)
-- Setup Step 2: [Login to Azure CLI](setup/xplat-cli-login.md)
+- Setup Step 2: [Install and Login to Azure CLI](setup/xplat-cli-login.md)
 - Setup Step 3: [Install Docker on the jumpbox](setup/azdockerinstall.md)
 - Setup Step 4: [Clone this github respository](setup/gitclone.md)
 
@@ -45,7 +45,7 @@ Experiment with using docker compose to deploy multi-container applications
 
 ## Module : Deploy Containers to Azure ACS with Kubernetes
 
-* [Deploy Azure ACS with Kubernetes](modules/kubernetes/kubernetes.md)
+* [Deploy Containers to Azure ACS with Kubernetes](modules/kubernetes/kubernetes.md)
 
 
 ## Module : Deploy an Azure Container Instance

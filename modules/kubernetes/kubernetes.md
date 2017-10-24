@@ -1,13 +1,27 @@
 ## Deploy Containers to Azure ACS with Kubernetes
 
+This lab will create an Azure Contaner Service (ACS) with Kubernetes as the orchestrator.  
+
+
 ## Task 1: Azure CLI 2.0 & Login To Azure
-1. Install the lastest version of the Azure CLI.  Go to the [Install Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) page and follow the instructions for your host OS.  You can also use the [Azure Portal Cloud Shell](https://docs.microsoft.com/en-us/azure/cloud-shell/overview?view=azure-cli-latest) if you do not want to install the Azure CLI locally.  
-  Another option is to use a Docker container with the Azure CLI pre-installed.  Run the following command inside your shell (i.e., command prompt, Powershell, Bash, etc.):
+1. You will create an Azure ACS using the azure cli. You can adapt any one of the following methods to access and exectue the azure cli commands.
+    1. (Accessing cli from your jumpbox) You should have  the az cli already installed if you followed  [Install and Login to Azure CLI](setup/xplat-cli-login.md)  
+        1. If not, then first, go back to your [linux jumpbox](setup/deploy-linuxjumpbox.md) where you will access and run the following command to install the lastest version of the Azure CLI .  
+        2. Go to the [Install Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) page and follow the instructions for your host OS. 
+        
+    2.  (Using the Azure Portal Cloud Shell)
+        
+        1.You can also use the [Azure Portal Cloud Shell](https://docs.microsoft.com/en-us/azure/cloud-shell/overview?view=azure-cli-latest) 
+    3. (With a docker container!) 
+        1. You can use a Docker container with the Azure CLI pre-installed.  Run the following command inside your shell (i.e., command prompt, Powershell, Bash, etc.):
       ```none
       docker run -it -p 8001:8001 azuresdk/azure-cli-python:latest bash 
       ```
-2. If you have not done so already, open a shell environment
-3. Execute the following command:
+2. Now open a shell environment from any one of the above methods.
+
+3. If you already had a shell and logged in to your Azure Subscription, then go to Task 2. Create ACS Cluster. 
+
+4. Execute the following command:
     ```none
     az login -u <username> -p <password>
     ```
@@ -34,7 +48,7 @@
     > az login
     > ```
     > You will receive a token that you must then authenticate your device with at [http://aka.ms/devicelogin](http://aka.ms/devicelogin).  It is recommended to access that Url with a InPrivate/InCognito browser session to avoid cookie conflicts.
-4. This lab assumes you will be using the default subscription associated with your Azure login Id.  If you want to change subscriptions, find the **"id"** value from the appropriate subscription in the returned json and execute the following command:
+4. This lab assumes you will be using the default subscription associated with your Azure login Id.  If you want to change subscriptions, find the **"id"** value from the appropriate subscription in the returned json (alternatvely try az account list) and execute the following command:
     ```none
     az account set --subscription="<SUBSCRIPTION_ID>"
     ```
@@ -45,16 +59,17 @@
     az group create --name=<RESOURCE_GROUP_NAME> --location="<AZURE_REGION>"
     ```
     **Example**
-        ```none
-        az group create --name=ACSWorkshop --location="SouthCentralUS"
+        
+        ```
+        az group create --name=ACSWorkshopRG --location="SouthCentralUS"
         ```
 2.  Create your ACS cluster using Kubernetes with the following command:
     ```none
     az acs create --orchestrator-type=kubernetes --resource-group=<RESOURCE_GROUP_NAME> --name=<CLUSTER_NAME> --dns-prefix=<ANYVALUE> --generate-ssh-keys
     ```
     **Example**
-    ```none
-    az acs create --orchestrator-type=kubernetes --resource-group=ACSWorkshop --name=acskubernetes --dns-prefix=acstest --generate-ssh-keys
+    ```
+    az acs create --orchestrator-type=kubernetes --resource-group=ACSWorkshopRG --name=acskubernetes --dns-prefix=acstest --generate-ssh-keys
     ```
 ## Task 3: Install kubectl
 Kubectl is the command line tool for administering your ACS Kubernetes cluster.
@@ -77,7 +92,7 @@ Kubectl is the command line tool for administering your ACS Kubernetes cluster.
     ```
     **Example**
     ```none
-    az acs kubernetes get-credentials --resource-group=ACSWorkshop --name=acskubernetes
+    az acs kubernetes get-credentials --resource-group=ACSWorkshopRG --name=acskubernetes
     ```
 ## Task 5: Deploy the application to Kubernetes
 In this task, you will deploy the readinglist application stack to Kubernetes cluster. In kubernetes a group of one or more containers run as a pod. Pods can also have shared storage for the containers running in the pod. 
