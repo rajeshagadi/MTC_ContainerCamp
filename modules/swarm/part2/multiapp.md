@@ -80,5 +80,4 @@ Now, let's scale the web tier:
 Take a look at the Docker Visualizer window you opened in part 1.  Notice how the containers making up this application are deployed in the cluster.
 
 
-You can type exit from the docker command to exit out.
 
