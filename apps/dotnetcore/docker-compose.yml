@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  azurereadinglist:
+    image: azurereadinglist
+    build:
+      context: ./AzureReadingList
+      dockerfile: Dockerfile
+    environment: 
+    - EndPoint=<Replace with DocumentEndpoint>
+    - ReadWriteAuthKey=<Replace with Primary Key>
+    - ReadOnlyAuthKey=<Replace with your endpoint key>
+    - DatabaseId=ReadingList
+    - CollectionId=Documentation
+    - readerName=testuser
