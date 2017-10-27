@@ -1,6 +1,7 @@
 ## Deploy Containers to Azure ACS with Kubernetes
 
-This lab will create an Azure Contaner Service (ACS) with Kubernetes as the orchestrator.  
+In this lab will we will create an Azure Contaner Service (ACS) with Kubernetes as the orchestrator. Then with Kubernetes cli _kubectl_  we will connect to the ACS cluster and deploy an application. Finnaly we will explore the Kubernetes cluster Dashbaord to explore the monitering and operations aspects.
+
 
 
 ## Task 1: Azure CLI 2.0 & Login To Azure
@@ -19,7 +20,7 @@ This lab will create an Azure Contaner Service (ACS) with Kubernetes as the orch
       ```
 2. Now open a shell environment from any one of the above methods.
 
-3. If you already had a shell and logged in to your Azure Subscription, then go to Task 2. Create ACS Cluster. 
+3. If you already had a shell and logged in to your Azure Subscription, then go to Task 2. Create ACS Cluster.
 
 4. Execute the following command:
     ```none
