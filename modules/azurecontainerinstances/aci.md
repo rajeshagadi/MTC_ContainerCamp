@@ -1,10 +1,14 @@
-# Containers for Developers in Microsoft Azure 
+# Deploing container to an Azure Container Instance 
 
+This lab will walk through creating an ASP.Net Core application as container and debugging and then finally deploying the container to the Azure Container Instance.
+
+In this lab you will build the app and create the container on your Windows or Mac machine.
+ 
 Make sure you have installed the following pre-requisites on your machine
 
 | Prerequisites        |            | 
 | ------------- |:-------------| 
-| .NET Core     | right-aligned | 
+| .NET Core     |  | 
 | Docker     | Download and install: [Docker Windows](https://download.docker.com/win/stable/InstallDocker.msi) - [Docker Mac](https://download.docker.com/mac/stable/Docker.dmg)| 
 | VS Code with C# Plugin    | [Install](https://code.visualstudio.com/Download)      | 
 | Node.js   |  [Install](https://nodejs.org/en/download/)   |

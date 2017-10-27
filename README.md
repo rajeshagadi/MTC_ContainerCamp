@@ -50,7 +50,7 @@ Experiment with using docker compose to deploy multi-container applications
 
 ## Module : Deploy an Azure Container Instance
 
-* [Deploy an Azure Container Instance](modules/azurecontainerinstances/aci.md)
+* [Deploing container to an Azure Container Instance](modules/azurecontainerinstances/aci.md)
 
 
 ## Module : Securing Containerized Applications
