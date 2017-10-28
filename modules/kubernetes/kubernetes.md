@@ -1,5 +1,7 @@
 ## Deploy Containers to Azure ACS with Kubernetes
 
+_Note: these intstructions are for Bash, specifically Bash on Ubuntu on Windows Subsytem for Linux._
+
 ## Task 1: Azure CLI 2.0 & Login To Azure
 1. Install the lastest version of the Azure CLI.  Go to the [Install Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) page and follow the instructions for your host OS.  You can also use the [Azure Portal Cloud Shell](https://docs.microsoft.com/en-us/azure/cloud-shell/overview?view=azure-cli-latest) if you do not want to install the Azure CLI locally.  
   Another option is to use a Docker container with the Azure CLI pre-installed.  Run the following command inside your shell (i.e., command prompt, Powershell, Bash, etc.):
@@ -57,14 +59,31 @@
     az acs create --orchestrator-type=kubernetes --resource-group=ACSWorkshop --name=acskubernetes --dns-prefix=acstest --generate-ssh-keys
     ```
 ## Task 3: Install kubectl
-Kubectl is the command line tool for administering your ACS Kubernetes cluster.
+Kubectl is the command line tool for administering your ACS Kubernetes cluster.  
 
-1. Install the *kubectl* tool with the following command:
+In the BASH Shell, the default location for installing kubectl is /usr/local/bin/kubectl.  This location is not typically available without chaning the permissions or running the command using the sudo preference.  For this lab, we will place the kubectl file into another direcotry within the current user's file structure.  This directory must exist prior to installing the cli.
+
+1. Create the directory for kubectl
+    ```none
+    mkdir aztools
+    ```
+
+2. Install the *kubectl* tool into the new directory with the following command:
 
     ```none
-    az acs kubernetes install-cli
+    az acs kubernetes install-cli --install-location=./aztools/kubectl
     ```
-2. Validate that *kubectl* has been successfully installed by running:
+
+    The kubectl command will install in the aztools directory.  Note that the text after / will be the name of the file as stored in the aztools directory.  This means if it is mistyped, as in kubctl, this is how you will need to refer to the 'kubectl' commands.  
+
+3. Add the location of the installation to the PATH.
+    This needs to be the full path and not a referenced path.  By following the steps here, your installation in steps 3 should be in **/home/_yourusername_/aztools**.  We will add this location to the path.
+
+    ```none
+    PATH=$PATH:/home/_yourusername_/aztools
+    ```
+
+4. Now that we have the installation and path mapped, validate that *kubectl* has been successfully installed by running:
     ```none
     kubectl version
     ```
