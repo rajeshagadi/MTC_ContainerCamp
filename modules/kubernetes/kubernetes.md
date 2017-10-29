@@ -159,3 +159,5 @@ The Kubernetes Dashboard is web interface that provides general-purpose monitori
     ```
 2. Open the browser on you machine and navigate to [http://localhost:8001:/ui](http://localhost:8001:/ui)
 
+### Blog Reference: [Enabling AKS on your Azure Subscription](https://blogs.msdn.microsoft.com/alimaz/2017/10/24/enabling-aks-in-your-azure-subscription/)
+
