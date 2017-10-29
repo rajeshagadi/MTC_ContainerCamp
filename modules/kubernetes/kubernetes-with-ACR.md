@@ -1,4 +1,4 @@
-## Deploy Containers to Azure ACS with Kubernetes
+## Deploy Containers to Azure AKS with Kubernetes
 
 ## Task 1: Azure CLI 2.0 & Login To Azure
 1. Install the lastest version of the Azure CLI.  Go to the [Install Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) page and follow the instructions for your host OS.  You can also use the [Azure Portal Cloud Shell](https://docs.microsoft.com/en-us/azure/cloud-shell/overview?view=azure-cli-latest) if you do not want to install the Azure CLI locally.  
@@ -39,23 +39,23 @@
     az account set --subscription="<SUBSCRIPTION_ID>"
     ```
 
-## Task 2: Create ACS Cluster
-1. Create a new resource group for your ACS to reside in:
+## Task 2: Create AKS Cluster
+1. Create a new resource group for your AKS to reside in.  Note that AKS is only available in limited region.  Closest in the US is westus2. 
     
     ```
-    az group create --name=<RESOURCE_GROUP_NAME> --location="<AZURE_REGION>"
+    az group create --name=<RESOURCE_GROUP_NAME> --location="westus2"
     ```
     **Example**
     ```
-      az group create --name=ACSWorkshop --location="SouthCentralUS"
+      az group create --name=AKSWorkshop --location="westus2"
     ```
-2.  Create your ACS cluster using Kubernetes with the following command:
+2.  Create your AKS cluster using Kubernetes with the following command:
     ```
-    az acs create --orchestrator-type=kubernetes --resource-group=<RESOURCE_GROUP_NAME> --name=<CLUSTER_NAME> --dns-prefix=<ANYVALUE> --generate-ssh-keys
+    az aks create --orchestrator-type=kubernetes --resource-group=<RESOURCE_GROUP_NAME> --name=<CLUSTER_NAME> --dns-prefix=<ANYVALUE> --generate-ssh-keys
     ```
     **Example**
     ```
-    az acs create --orchestrator-type=kubernetes --resource-group=ACSWorkshop --name=acskubernetes --dns-prefix=acstest --generate-ssh-keys
+    az aks create --orchestrator-type=kubernetes --resource-group=aksWorkshop --name=akskubernetes --dns-prefix=akstest --generate-ssh-keys
     ```
 
 ## Task 3: Create an Azure Container Registry
@@ -66,7 +66,7 @@ Azure Container Registry (ACR) is an Azure-based, private registry, for Docker c
     ```
     **Example**
     ```
-    az acr create --resource-group ACSWorkshop --name myacr --sku Basic --admin-enabled true
+    az acr create --resource-group AKSWorkshop --name myacr --sku Basic --admin-enabled true
     ```
 2. To push images to the registry, we must authenticate with the registry.  Use the following command to authenticate with ACR
  
@@ -80,12 +80,12 @@ Azure Container Registry (ACR) is an Azure-based, private registry, for Docker c
 
 
 ## Task 3: Install kubectl
-Kubectl is the command line tool for administering your ACS Kubernetes cluster.
+Kubectl is the command line tool for administering your AKS Kubernetes cluster.
 
 1. Install the *kubectl* tool with the following command:
 
     ```
-    az acs kubernetes install-cli
+    az AKS install-cli
     ```
 2. Validate that *kubectl* has been successfully installed by running:
     ```
@@ -96,11 +96,11 @@ Kubectl is the command line tool for administering your ACS Kubernetes cluster.
 1. Run the following commadn to download the client credentials needed to access the Kubernetes cluster:
 
     ```
-    az acs kubernetes get-credentials --resource-group=<RESOURCE_GROUP_NAME> --name=<CLUSTER_NAME>
+    az aks get-credentials --resource-group=<RESOURCE_GROUP_NAME> --name=<CLUSTER_NAME>
     ```
     **Example**
     ```
-    az acs kubernetes get-credentials --resource-group=ACSWorkshop --name=acskubernetes
+    az aks get-credentials --resource-group=AKSWorkshop --name=akskubernetes
     ```
 ## Task 5: Deploy the application to Kubernetes
 In this task, you will deploy the readinglist application stack to Kubernetes cluster. In kubernetes a group of one or more containers run as a pod. Pods can also have shared storage for the containers running in the pod. 
