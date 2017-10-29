@@ -1,4 +1,4 @@
-## Deploy Containers to Azure ACS with Kubernetes
+## Deploy Containers to Azure aks with Kubernetes
 
 _Note: these intstructions are for Bash, specifically Bash on Ubuntu on Windows Subsytem for Linux._
 
@@ -41,25 +41,32 @@ _Note: these intstructions are for Bash, specifically Bash on Ubuntu on Windows 
     az account set --subscription="<SUBSCRIPTION_ID>"
     ```
 
-## Task 2: Create ACS Cluster
-1. Create a new resource group for your ACS to reside in:
+## Task 2: Create AKS Cluster
+1. Create a new resource group for your AKS to reside in.  Note that AKS must be created in **westus2** as the service is only available there at this time.
+
+```
+    az group create --name=<RESOURCE_GROUP_NAME> --location="westus2"
+```        
+
+**Example**
+
+        az group create --name=AKSWorkshop --location="westus2"
+
+2.  Create your AKS cluster using Kubernetes with the following command:
     ```none
-    az group create --name=<RESOURCE_GROUP_NAME> --location="<AZURE_REGION>"
+    az aks create -g <RESOURCE_GROUP_NAME> -n <CLUSTER_NAME> --dns-prefix=<ANYVALUE> --generate-ssh-keys
     ```
     **Example**
-        ```none
-        az group create --name=ACSWorkshop --location="SouthCentralUS"
-        ```
-2.  Create your ACS cluster using Kubernetes with the following command:
     ```none
-    az acs create --orchestrator-type=kubernetes --resource-group=<RESOURCE_GROUP_NAME> --name=<CLUSTER_NAME> --dns-prefix=<ANYVALUE> --generate-ssh-keys
+    az aks create -g AkSWorkshop -n akscluster --dns-prefix=akstest --generate-ssh-keys
     ```
-    **Example**
-    ```none
-    az acs create --orchestrator-type=kubernetes --resource-group=ACSWorkshop --name=acskubernetes --dns-prefix=acstest --generate-ssh-keys
-    ```
+
+    _If you have trouble running AKS commands because the error states AKS is not enabled for your subscription, follow the information in the blog post below to enable this._
+
+     ### Blog Reference: [Enabling AKS on your Azure Subscription](https://blogs.msdn.microsoft.com/alimaz/2017/10/24/enabling-aks-in-your-azure-subscription/)
+
 ## Task 3: Install kubectl
-Kubectl is the command line tool for administering your ACS Kubernetes cluster.  
+Kubectl is the command line tool for administering your AKS Kubernetes cluster.  
 
 In the BASH Shell, the default location for installing kubectl is /usr/local/bin/kubectl.  This location is not typically available without chaning the permissions or running the command using the sudo preference.  For this lab, we will place the kubectl file into another direcotry within the current user's file structure.  This directory must exist prior to installing the cli.
 
@@ -71,7 +78,7 @@ In the BASH Shell, the default location for installing kubectl is /usr/local/bin
 2. Install the *kubectl* tool into the new directory with the following command:
 
     ```none
-    az acs kubernetes install-cli --install-location=./aztools/kubectl
+    az aks install-cli --install-location=./aztools/kubectl
     ```
 
     The kubectl command will install in the aztools directory.  Note that the text after / will be the name of the file as stored in the aztools directory.  This means if it is mistyped, as in kubctl, this is how you will need to refer to the 'kubectl' commands.  
@@ -92,11 +99,11 @@ In the BASH Shell, the default location for installing kubectl is /usr/local/bin
 1. Run the following commadn to download the client credentials needed to access the Kubernetes cluster:
 
     ```none
-    az acs kubernetes get-credentials --resource-group=<RESOURCE_GROUP_NAME> --name=<CLUSTER_NAME>
+    az aks get-credentials --resource-group=<RESOURCE_GROUP_NAME> --name=<CLUSTER_NAME>
     ```
     **Example**
     ```none
-    az acs kubernetes get-credentials --resource-group=ACSWorkshop --name=acskubernetes
+    az aks get-credentials --resource-group=aksWorkshop --name=akskubernetes
     ```
 ## Task 5: Deploy the application to Kubernetes
 In this task, you will deploy the readinglist application stack to Kubernetes cluster. In kubernetes a group of one or more containers run as a pod. Pods can also have shared storage for the containers running in the pod. 
@@ -158,6 +165,3 @@ The Kubernetes Dashboard is web interface that provides general-purpose monitori
     kubectl proxy -p 8001
     ```
 2. Open the browser on you machine and navigate to [http://localhost:8001:/ui](http://localhost:8001:/ui)
-
-### Blog Reference: [Enabling AKS on your Azure Subscription](https://blogs.msdn.microsoft.com/alimaz/2017/10/24/enabling-aks-in-your-azure-subscription/)
-
