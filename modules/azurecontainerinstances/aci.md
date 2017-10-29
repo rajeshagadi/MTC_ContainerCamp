@@ -256,6 +256,6 @@ To support different developer environments, the .NET Core application will be d
     ```
 
 ### Blog reference:
-https://blogs.msdn.microsoft.com/alimaz/2017/08/17/visual-studio-docker-azure-container-instances-better-together/
+[Visual Studio, Docker and ACI Better Together!](https://blogs.msdn.microsoft.com/alimaz/2017/08/17/visual-studio-docker-azure-container-instances-better-together/)
 
 
