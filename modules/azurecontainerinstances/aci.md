@@ -1,4 +1,4 @@
-# Deploing container to an Azure Container Instance 
+# Deploying container to an Azure Container Instance
 
 This lab will walk through creating an ASP.Net Core application as container and debugging and then finally deploying the container to the Azure Container Instance.
 
@@ -54,8 +54,10 @@ Make sure you have installed the following pre-requisites on your machine
 
 6. Press **F5** and confirm the app runs correctly.
 
+7. Stop the run before proceeding to Task 2.
+
 ## Task 2: Create a Docker Image
-To support different developer environments, the .NET Core application will be deployed to Linux.  
+To support different developer environments, the .NET Core application will be deployed to Linux.  Modify the application you started in Task 1 as follows:
 
 1. Update *.csproj* with the following:
 
@@ -66,15 +68,15 @@ To support different developer environments, the .NET Core application will be d
       </PropertyGroup>
     ```
 
-2. Open the VS Code Terminal windows by pressing **Ctrl-`**.   Publish app using VS Code terminal window with the following command: 
+2. Open the VS Code Terminal windows by pressing **Ctrl-`** (backtick or the Key with ~ and \' ).  Publish app using VS Code terminal window with the following commands:
     ```
     dotnet restore
     dotnet publish
     ```
 
-3. Create new file [**Ctrl-N**] and name it *dockerfile* 
+3. Create new file by clicking [**Ctrl-N**] in VS Code and re-name it to *dockerfile*. You can do this by first right-click->Save As->Right Click->Rename. Ensure that there is no extension. The file name should be simply 'dockerfile'.
 
-4. Add the following.  Make sure to replace **<appname>** in **ENTRYPOINT** to match your application name.
+4. Add the following.  Make sure to replace **\<appname>** in **ENTRYPOINT** last line to match your application name. For example helloworld.dll
     ```
     FROM microsoft/aspnetcore:1.1.2-jessie
     RUN apt-get update
@@ -89,7 +91,7 @@ To support different developer environments, the .NET Core application will be d
     
 5. Press **Ctrl-S** to save changes.
 
-6. In the Terminal windows, create the Docker image by running the following commands:
+6. In the Terminal windows, create the Docker image by running the following commands.  Ensure to substitute <your_image_name> with for example helloworldfromlinux :
     ```
     docker build -t <your_image_name> .
     docker run -d -p 8080:8080  <your_image_name>
