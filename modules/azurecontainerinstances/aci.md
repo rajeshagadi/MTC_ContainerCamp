@@ -8,17 +8,18 @@ Make sure you have installed the following pre-requisites on your machine
 
 | Prerequisites        |            | 
 | ------------- |:-------------| 
-| .NET Core     |  | 
+| .NET Core     | https://www.microsoft.com/net/core | 
 | Docker     | Download and install: [Docker Windows](https://download.docker.com/win/stable/InstallDocker.msi) - [Docker Mac](https://download.docker.com/mac/stable/Docker.dmg)| 
 | VS Code with C# Plugin    | [Install](https://code.visualstudio.com/Download)      | 
 | Node.js   |  [Install](https://nodejs.org/en/download/)   |
 | Yeoman   | Run from command prompt: **npm install -g yo** |
-| Generator-docker  | Run from command prompt: **npm install -g**
-| Bower | Run from command prompt: **npm install -g bower** |
+| Yeoman generator for Docker  | Run from command prompt: **npm install -g generator-docker**  
+||On Windows run from the folder "Program Files/nodejs/node_modules" |
+| Bower-A package manager for the web | Run from command prompt: **npm install -g bower** |
 | Gulp | Run from command prompt: **npm install -g gulp** |
 
 ## Task 1: Create ASP.NET Core Hello World Application
-1. Open a command prompt and run
+1. Open a command prompt and change your directory to your code location. Then run following commands to create an ASP.Net Core app.
     ```
     md helloworld
     cd helloworld
@@ -30,14 +31,22 @@ Make sure you have installed the following pre-requisites on your machine
 
     Add missing assets  necessary to debug the application by selecting **Yes** on the notification bar.
     
-    Add the following line of code 
-    ```c-sharp
+    Add the following line of code under the BuildWebHost method but before the .Build(); 
+    ```
     .UseUrls("http://*:8080")
     
     ```
+    Example:
+    ```
+    public static IWebHost BuildWebHost(string[] args) =>
+    WebHost.CreateDefaultBuilder(args)
+        .UseStartup<Startup>()
+        .UseUrls("http://*:8080")
+        .Build();
+    ```
 3. Press **Ctrl+S** to save the changes.
 
-4. Open *Startup.cs* and modify the following line of code to match what is shown:
+4. Open *Startup.cs* and modify the following line of code to match what is shown in the Configure method:
     ```
     await context.Response.WriteAsync($"Hello World v1! {DateTime.Now}");
     ```
