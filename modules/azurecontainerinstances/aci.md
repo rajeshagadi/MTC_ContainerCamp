@@ -100,6 +100,8 @@ To support different developer environments, the .NET Core application will be d
 
 ## Task 3: Debug an Application in a Docker Container
 
+**Note: This section is ungoing an update and may not work correctly at this time**
+
 1. Publish debug version of the application
     ```none
     dotnet publish -c Debug 
