@@ -39,20 +39,18 @@ westcentralus  mySwarmCluster  Succeeded            SwarmRG
 ```
 
 ## Connect to the Cluster
-Now that the cluster is deployed, we need to ssh to the master.  The first step is to find the DNS name that was assigned to the loadbalancer in front of the master.  We can find this using the cli:
 
-    MASTERFQDN=$(az acs list -o tsv --query [0].masterProfile.fqdn)
-    echo $MASTERFQDN
+Now that the cluster is deployed, we need to ssh to the master.  The first step is to find the DNS name that was assigned to the master.  We can find this using the cli:
 
-Similarly, we need to grab the DNS name for the agents in our cluster.  Run the following command:
+    MASTERFQDN=$(az acs list -o tsv --query [0].masterProfile.fqdn); echo $MASTERFQDN
 
-    AGENTFQDN=$(az acs list -o tsv --query [0].agentPoolProfiles[0].fqdn)
-    echo $AGENTFQDN
+Similarly, we need to find and save the DNS name for the agents in our cluster.  Run the following command:
+
+    AGENTFQDN=$(az acs list -o tsv --query [0].agentPoolProfiles[0].fqdn); echo $AGENTFQDN
 
 Make note of this name (save it to a scratchpad); we'll refer to it later as AGENTFQDN.
 
- 
- At this point, we can ssh to your master using the following (substituting your master name):
+At this point, we can ssh to your master using the following (which automatically substitutes the master name using the $MASTERFQDN shell variable):
 
     ssh -i ~/.ssh/acs_rsa azureuser@$MASTERFQDN
 
@@ -155,7 +153,7 @@ Finally, delete the service:
 
 ## Optional steps:  Monitor your cluster
 
-Follow the steps outlined in section [Instrument & Monitor your containers](/modules/oms/oms4containers.md) to get your Workspace id and your secret key. Substitue in below command accordingly:
+Follow the steps outlined in section [Instrument & Monitor your containers](/modules/oms/oms4containers.md) to get your Workspace id and your secret key. Subsitute in below command accordingly:
 
 
 On your swarm master, run the following to set up your secrets:
@@ -168,10 +166,11 @@ docker secret ls
 ```
 Then run:
 ```
- docker service create --name omsagent --mode global --mount type=bind, \
- source=/var/run/docker.sock,destination=/var/run/docker.sock --secret source=WSID, \
- target=WSID --secret source=KEY,target=KEY -p 25225:25225 -p 25224:25224/udp \
- --restart-condition=on-failure microsoft/oms:test1
+docker service create --name omsagent --mode global \
+--mount type=bind,source=/var/run/docker.sock,destination=/var/run/docker.sock \
+--secret source=WSID,target=WSID --secret source=KEY,target=KEY \
+-p 25225:25225 -p 25224:25224/udp \
+--restart-condition=on-failure microsoft/oms
  ```
  And in a few minutes, you should see your swarm appear in your OMS workspace.
 
