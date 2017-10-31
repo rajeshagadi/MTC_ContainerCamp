@@ -42,7 +42,7 @@ Make sure you have installed the following pre-requisites on your machine
 6. Press **F5** and confirm the app runs correctly by browsing to http://localhost:8080.
 
 ## Task 2: Create a Docker Image
-To support different developer environments, the .NET Core application will be deployed to Linux.  
+To support different developer environments, the .NET Core application will be deployed to Linux.  Modify the application you started in Task 1 as follows:
 
 1. Open the VS Code Terminal windows by pressing **Ctrl-`**.   Publish app using VS Code terminal window with the following command: 
     ```
