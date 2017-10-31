@@ -5,12 +5,12 @@ We're going to use the Azure portal to deploy a jumpbox for the later exercises.
 1. Log into the Azure Portal at https://portal.azure.com
 2. Click on the "+" in the upper left, then click on 'Compute', then select Ubuntu 16.04, and on the next page, click 'Create'.
 3. On the basics page, fill in the following:
-    1. **Name:**    *enter a name for the server* (ex. JumpBoxRG) 
+    1. **Name:**    *enter a name for the server* (ex. jumpbox) 
     1. **Username:**    *enter a username* (ex. adminuser)
     1. **Authentication Type:** choose 'Password'
     2. **Password:**    *enter a password*
     3. **Resource Group:** pick one these two options:
-         1. Create new: *enter a name for your resource group* (ex. JumpBoxRG)
+         1. Create new: *enter a name for your resource group* (ex. jumpboxrg)
          2. Select existing: select the existing Resource Group from the list.
     4. **Location:** select Location for the server (ex. East US)
 

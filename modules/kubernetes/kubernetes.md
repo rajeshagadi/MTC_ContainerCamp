@@ -1,28 +1,15 @@
-## Deploy Containers to Azure ACS with Kubernetes
+## Deploy Containers to Azure aks with Kubernetes
 
-In this lab will we will create an Azure Contaner Service (ACS) with Kubernetes as the orchestrator. Then with Kubernetes cli _kubectl_  we will connect to the ACS cluster and deploy an application. Finnaly we will explore the Kubernetes cluster Dashbaord to explore the monitering and operations aspects.
-
-
+_Note: these intstructions are for Bash, specifically Bash on Ubuntu on Windows Subsytem for Linux._
 
 ## Task 1: Azure CLI 2.0 & Login To Azure
-1. You will create an Azure ACS using the azure cli. You can adapt any one of the following methods to access and exectue the azure cli commands.
-    1. (Accessing cli from your jumpbox) You should have  the az cli already installed if you followed  [Install and Login to Azure CLI](setup/xplat-cli-login.md)  
-        1. If not, then first, go back to your [linux jumpbox](setup/deploy-linuxjumpbox.md) where you will access and run the following command to install the lastest version of the Azure CLI .  
-        2. Go to the [Install Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) page and follow the instructions for your host OS. 
-        
-    2.  (Using the Azure Portal Cloud Shell)
-        
-        1.You can also use the [Azure Portal Cloud Shell](https://docs.microsoft.com/en-us/azure/cloud-shell/overview?view=azure-cli-latest) 
-    3. (With a docker container!) 
-        1. You can use a Docker container with the Azure CLI pre-installed.  Run the following command inside your shell (i.e., command prompt, Powershell, Bash, etc.):
+1. Install the lastest version of the Azure CLI.  Go to the [Install Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) page and follow the instructions for your host OS.  You can also use the [Azure Portal Cloud Shell](https://docs.microsoft.com/en-us/azure/cloud-shell/overview?view=azure-cli-latest) if you do not want to install the Azure CLI locally.  
+  Another option is to use a Docker container with the Azure CLI pre-installed.  Run the following command inside your shell (i.e., command prompt, Powershell, Bash, etc.):
       ```none
       docker run -it -p 8001:8001 azuresdk/azure-cli-python:latest bash 
       ```
-2. Now open a shell environment from any one of the above methods.
-
-3. If you already had a shell and logged in to your Azure Subscription, then go to Task 2. Create ACS Cluster.
-
-4. Execute the following command:
+2. If you have not done so already, open a shell environment
+3. Execute the following command:
     ```none
     az login -u <username> -p <password>
     ```
@@ -49,38 +36,61 @@ In this lab will we will create an Azure Contaner Service (ACS) with Kubernetes 
     > az login
     > ```
     > You will receive a token that you must then authenticate your device with at [http://aka.ms/devicelogin](http://aka.ms/devicelogin).  It is recommended to access that Url with a InPrivate/InCognito browser session to avoid cookie conflicts.
-4. This lab assumes you will be using the default subscription associated with your Azure login Id.  If you want to change subscriptions, find the **"id"** value from the appropriate subscription in the returned json (alternatvely try az account list) and execute the following command:
+4. This lab assumes you will be using the default subscription associated with your Azure login Id.  If you want to change subscriptions, find the **"id"** value from the appropriate subscription in the returned json and execute the following command:
     ```none
     az account set --subscription="<SUBSCRIPTION_ID>"
     ```
 
-## Task 2: Create ACS Cluster
-1. Create a new resource group for your ACS to reside in:
+## Task 2: Create AKS Cluster
+1. Create a new resource group for your AKS to reside in.  Note that AKS must be created in **westus2** as the service is only available there at this time.
+
+```
+    az group create --name=<RESOURCE_GROUP_NAME> --location="westus2"
+```        
+
+**Example**
+
+        az group create --name=AKSWorkshop --location="westus2"
+
+2.  Create your AKS cluster using Kubernetes with the following command:
     ```none
-    az group create --name=<RESOURCE_GROUP_NAME> --location="<AZURE_REGION>"
+    az aks create -g <RESOURCE_GROUP_NAME> -n <CLUSTER_NAME> --dns-prefix=<ANYVALUE> --generate-ssh-keys
     ```
     **Example**
-        
-        ```
-        az group create --name=ACSWorkshopRG --location="SouthCentralUS"
-        ```
-2.  Create your ACS cluster using Kubernetes with the following command:
     ```none
-    az acs create --orchestrator-type=kubernetes --resource-group=<RESOURCE_GROUP_NAME> --name=<CLUSTER_NAME> --dns-prefix=<ANYVALUE> --generate-ssh-keys
+    az aks create -g AkSWorkshop -n akscluster --dns-prefix=akstest --generate-ssh-keys
     ```
-    **Example**
-    ```
-    az acs create --orchestrator-type=kubernetes --resource-group=ACSWorkshopRG --name=acskubernetes --dns-prefix=acstest --generate-ssh-keys
-    ```
+
+    _If you have trouble running AKS commands because the error states AKS is not enabled for your subscription, follow the information in the blog post below to enable this._
+
+     ### Blog Reference: [Enabling AKS on your Azure Subscription](https://blogs.msdn.microsoft.com/alimaz/2017/10/24/enabling-aks-in-your-azure-subscription/)
+
 ## Task 3: Install kubectl
-Kubectl is the command line tool for administering your ACS Kubernetes cluster.
+Kubectl is the command line tool for administering your AKS Kubernetes cluster.  
 
-1. Install the *kubectl* tool with the following command:
+In the BASH Shell, the default location for installing kubectl is /usr/local/bin/kubectl.  This location is not typically available without chaning the permissions or running the command using the sudo preference.  For this lab, we will place the kubectl file into another direcotry within the current user's file structure.  This directory must exist prior to installing the cli.
+
+1. Create the directory for kubectl
+    ```none
+    mkdir aztools
+    ```
+
+2. Install the *kubectl* tool into the new directory with the following command:
 
     ```none
-    az acs kubernetes install-cli
+    az aks install-cli --install-location=./aztools/kubectl
     ```
-2. Validate that *kubectl* has been successfully installed by running:
+
+    The kubectl command will install in the aztools directory.  Note that the text after / will be the name of the file as stored in the aztools directory.  This means if it is mistyped, as in kubctl, this is how you will need to refer to the 'kubectl' commands.  
+
+3. Add the location of the installation to the PATH.
+    This needs to be the full path and not a referenced path.  By following the steps here, your installation in steps 3 should be in **/home/_yourusername_/aztools**.  We will add this location to the path.
+
+    ```none
+    PATH=$PATH:/home/_yourusername_/aztools
+    ```
+
+4. Now that we have the installation and path mapped, validate that *kubectl* has been successfully installed by running:
     ```none
     kubectl version
     ```
@@ -89,11 +99,11 @@ Kubectl is the command line tool for administering your ACS Kubernetes cluster.
 1. Run the following commadn to download the client credentials needed to access the Kubernetes cluster:
 
     ```none
-    az acs kubernetes get-credentials --resource-group=<RESOURCE_GROUP_NAME> --name=<CLUSTER_NAME>
+    az aks get-credentials --resource-group=<RESOURCE_GROUP_NAME> --name=<CLUSTER_NAME>
     ```
     **Example**
     ```none
-    az acs kubernetes get-credentials --resource-group=ACSWorkshopRG --name=acskubernetes
+    az aks get-credentials --resource-group=aksWorkshop --name=akskubernetes
     ```
 ## Task 5: Deploy the application to Kubernetes
 In this task, you will deploy the readinglist application stack to Kubernetes cluster. In kubernetes a group of one or more containers run as a pod. Pods can also have shared storage for the containers running in the pod. 
@@ -155,4 +165,3 @@ The Kubernetes Dashboard is web interface that provides general-purpose monitori
     kubectl proxy -p 8001
     ```
 2. Open the browser on you machine and navigate to [http://localhost:8001:/ui](http://localhost:8001:/ui)
-
