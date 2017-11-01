@@ -46,9 +46,9 @@ Experiment with using docker compose to deploy multi-container applications
 * [Deploy multicontainer applications](modules/swarm/part2/multiapp.md)
 
 
-## Module : Deploy Containers to Azure ACS with Kubernetes
+## Module : Deploy Containers to Azure aks with Kubernetes
 
-* [Deploy Azure ACS with Kubernetes](modules/kubernetes/kubernetes.md)
+* [Deploy Containers to Azure aks with Kubernetes](modules/kubernetes/kubernetes.md)
 
 
 ## Module : Deploy an Azure Container Instance

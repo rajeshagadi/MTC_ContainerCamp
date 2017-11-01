@@ -1,47 +1,49 @@
 ## Deploy Containers to Azure aks with Kubernetes
 
-_Note: these intstructions are for Bash, specifically Bash on Ubuntu on Windows Subsytem for Linux._
+In this lab we will create the new managed Azure Kubernetes Container Service (AKS). 
 
-## Task 1: Azure CLI 2.0 & Login To Azure
-1. Install the lastest version of the Azure CLI.  Go to the [Install Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) page and follow the instructions for your host OS.  You can also use the [Azure Portal Cloud Shell](https://docs.microsoft.com/en-us/azure/cloud-shell/overview?view=azure-cli-latest) if you do not want to install the Azure CLI locally.  
-  Another option is to use a Docker container with the Azure CLI pre-installed.  Run the following command inside your shell (i.e., command prompt, Powershell, Bash, etc.):
-      ```none
-      docker run -it -p 8001:8001 azuresdk/azure-cli-python:latest bash 
-      ```
-2. If you have not done so already, open a shell environment
-3. Execute the following command:
-    ```none
-    az login -u <username> -p <password>
+In this lab the instructions are for Bash, specifically Bash on Ubuntu on Windows Subsytem for Linux. Alternatively you can refere to to [Setup](/setup/setup.md) module to . 
+
+Here we will ensure we have correct  version of azure cli to perform necessary support for AKS. Then we will  install the kubectl, the CLI for managing the Kubernetes cluster. Using kubectl, we will deploy a sample application. Finally we will explore the Kubernetes Clustor, a general-purpose monitoring and operations for Kubernetes clusters.
+
+## Task 1: Login to Azure with Azure cli
+
+1. If you not already done so, follow instructions from [Azure cli install options and login](/setup/cli-install-options-login.md) to install Azure cli and login and set to your desired Azure Subscrition where you want to deploy the aks cluster.
+
+
+## Task 2: Login to Azure with Azure cli
+
+    Pre read [Enabling AKS in your Azure subscription](https://blogs.msdn.microsoft.com/alimaz/2017/10/24/enabling-aks-in-your-azure-subscription/)
+
+1. Ensure you have correct version of Azure cli. Check by following command to      ensure the Azure Cli is atleast **2.0.20+**
+
     ```
-    A successful login will result in JSON output similar to the following:
-    ```json
-    [
-       {
-        "cloudName": "AzureCloud",
-        "id": "6e7ce629-5859-4837-bce5-571fe7b268c5",
-        "isDefault": false,
-        "name": "MTC Houston Labs",
-        "state": "Enabled",
-        "tenantId": "a8e59e50-6360-4372-a629-9a9bf465158e",
-        "user": {
-          "name": "ratella@mtchouston.net",
-          "type": "user"
-        }
-      }
-    ]
-    
+    az -v
     ```
-    > Note:  If your AAD policy requires multi-factor authentication, you will need to excute the following command:
-    > ```none
-    > az login
-    > ```
-    > You will receive a token that you must then authenticate your device with at [http://aka.ms/devicelogin](http://aka.ms/devicelogin).  It is recommended to access that Url with a InPrivate/InCognito browser session to avoid cookie conflicts.
-4. This lab assumes you will be using the default subscription associated with your Azure login Id.  If you want to change subscriptions, find the **"id"** value from the appropriate subscription in the returned json and execute the following command:
-    ```none
-    az account set --subscription="<SUBSCRIPTION_ID>"
+2. If your cli version is less than above mentioned version then follow below steps to upgrade your cli
+
+    ```
+    apt-get upgrade azure-cli
+    ```
+    Above steps will take some time. Once update complete, once again check the version. If your cli version is still not the recomended version, then try below two commands
+
+    ```
+    sudo apt-get update
+    sudo apt-get upgrade
     ```
 
-## Task 2: Create AKS Cluster
+    Test by trying below command to ensure you have support for aks
+
+    ```
+    az aks
+    ```
+
+3. Next we need to ensure that the Resoure Provider for the new AKS service is registered for your subscription. Above referenced pre-read blog, you can see the powershell approach to enable, however here there is alterative quick approach check via the azure.portal.com. Follow below steps to valdiate and register if not already registered.
+
+Portal>Subscriptions>Your Subscription>Resource providers>Microsoft.ContainerService> (Ensure registered)
+
+
+## Task 3: Create AKS Cluster
 1. Create a new resource group for your AKS to reside in.  Note that AKS must be created in **westus2** as the service is only available there at this time.
 
 ```
@@ -50,22 +52,18 @@ _Note: these intstructions are for Bash, specifically Bash on Ubuntu on Windows 
 
 **Example**
 
-        az group create --name=AKSWorkshop --location="westus2"
+        az group create --name=AKSWorkshopRG --location="westus2"
 
 2.  Create your AKS cluster using Kubernetes with the following command:
     ```none
-    az aks create -g <RESOURCE_GROUP_NAME> -n <CLUSTER_NAME> --dns-prefix=<ANYVALUE> --generate-ssh-keys
+    az aks create -g <RESOURCE_GROUP_NAME> -n <CLUSTER_NAME> --dns-name-prefix=<ANYVALUE> --generate-ssh-keys
     ```
     **Example**
-    ```none
-    az aks create -g AkSWorkshop -n akscluster --dns-prefix=akstest --generate-ssh-keys
+    ```
+    az aks create -g AKSWorkshopRG -n akscluster --dns-name-prefix=akstest --generate-ssh-keys
     ```
 
-    _If you have trouble running AKS commands because the error states AKS is not enabled for your subscription, follow the information in the blog post below to enable this._
-
-     ### Blog Reference: [Enabling AKS on your Azure Subscription](https://blogs.msdn.microsoft.com/alimaz/2017/10/24/enabling-aks-in-your-azure-subscription/)
-
-## Task 3: Install kubectl
+## Task 4: Install kubectl
 Kubectl is the command line tool for administering your AKS Kubernetes cluster.  
 
 In the BASH Shell, the default location for installing kubectl is /usr/local/bin/kubectl.  This location is not typically available without chaning the permissions or running the command using the sudo preference.  For this lab, we will place the kubectl file into another direcotry within the current user's file structure.  This directory must exist prior to installing the cli.
@@ -95,7 +93,7 @@ In the BASH Shell, the default location for installing kubectl is /usr/local/bin
     kubectl version
     ```
 
-## Task 4: Connect to the Cluster with *kubectl*
+## Task 5: Connect to the Cluster with *kubectl*
 1. Run the following commadn to download the client credentials needed to access the Kubernetes cluster:
 
     ```none
@@ -103,9 +101,9 @@ In the BASH Shell, the default location for installing kubectl is /usr/local/bin
     ```
     **Example**
     ```none
-    az aks get-credentials --resource-group=aksWorkshop --name=akskubernetes
+    az aks get-credentials --resource-group=AKSWorkshopRG --name=akskubernetes
     ```
-## Task 5: Deploy the application to Kubernetes
+## Task 6: Deploy the application to Kubernetes
 In this task, you will deploy the readinglist application stack to Kubernetes cluster. In kubernetes a group of one or more containers run as a pod. Pods can also have shared storage for the containers running in the pod. 
 
 At the end of this task you will have a total of 3 pods. Two for the app tier and one for MySQL.. The app tier pods will have both �ReadingList web app� and �Recommendation service�. There will be a total of 5 containers across 3 pods. 
@@ -157,7 +155,7 @@ At the end of this task you will have a total of 3 pods. Two for the app tier an
     kubectl get ep web
     ```
 
-## Task 6: Explore the Kubernetes cluster with the Dashboard
+## Task 7: Explore the Kubernetes cluster with the Dashboard
 The Kubernetes Dashboard is web interface that provides general-purpose monitoring and operations for Kubernetes clusters.  You can access this dashboard from your local machine via a proxy tunnel created by the *kubectl* tool.
 
 1. To open a proxy tunnel to the Kubernetes Dashboard, run the following command:
