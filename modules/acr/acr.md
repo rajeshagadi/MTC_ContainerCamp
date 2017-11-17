@@ -6,7 +6,6 @@ In this lab we will create an Azure Web app for container (on Linux) and setup a
 
 1. Download docker CLI or docker for windows. I am installing docker on my local windows 10 from https://www.docker.com/docker-windows . After installation ensure that you can see the docker icon in tray.
 
- 
 2. Signup for a docker account at https://cloud.docker.com/ & activate the account & sign in .
 
 3. Login to docker on your PC/Mac.
@@ -14,7 +13,7 @@ In this lab we will create an Azure Web app for container (on Linux) and setup a
 4. Lets use nginx image as sample image so pull the image. 
 
 ```	 
-		docker pull nginx
+    docker pull nginx
 ```
 
 5. Lets ensure image is up and running on command prompt:
@@ -102,8 +101,20 @@ So service url looks like :
         
         
         you can test it with deploying modified image or new image with same tag , lets see how to do it ?
+
 ## Task 5: Testing Continous Deployment
-17. Modify the locally residing nginx image 
-18.  rebuild it so that changes are persistence 
-19. push the new image on Azure portal to verify it should auto deploy .
+
+17. Edit the index.html file, add some comments such as "my new updates 1" under the <body> section.
+
+18. Review the local docker file and rebuild it so that changes updated in your docker image
+
+```
+    docker build --tag nginx .
+```
+19. Push the new image on Azure portal to verify it should auto deploy.
+
+```
+    docker push myregistry.azurecr.io/samples1/php
+```
+
 20. Browse the web app to see that new image is up and running.
